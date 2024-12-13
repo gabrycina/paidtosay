@@ -1,0 +1,42 @@
+// This is your Prisma schema file
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Submission {
+  id            String   @id @default(cuid())
+  brandName     String
+  amount        Float
+  currency      String
+  platform      String
+  category      String
+  followerCount Int
+  description   String?
+  createdAt     DateTime @default(now())
+  inviteCode    InviteCode @relation(fields: [inviteId], references: [id])
+  inviteId      String
+}
+
+model InviteCode {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  used      Boolean   @default(false)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  submissions Submission[]
+}
+
+model InviteRequest {
+  id        String   @id @default(cuid())
+  email     String
+  platform  String
+  username  String
+  followers Int
+  status    String   @default("pending") // pending, approved, rejected
+  createdAt DateTime @default(now())
+}
