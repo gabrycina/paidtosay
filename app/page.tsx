@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PrismaClient } from '@prisma/client'
 import { DataTable } from '@/components/data-table'
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import ViewDealsButton from "@/components/view-deals-button"
 
 const prisma = new PrismaClient()
 
@@ -31,7 +34,28 @@ export default async function Home() {
   }
 
   return (
-    <div className="container mx-auto py-10 space-y-8">
+    <div className="container mx-auto space-y-8">
+      {/* Hero Section */}
+      <div className="py-20 text-center space-y-6">
+        <h1 className="text-4xl md:text-6xl font-bold">
+          Know Your Worth 💸
+        </h1>
+        <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+          Anonymous platform for creators to share and discover real sponsorship rates. No more guessing what to charge.
+        </p>
+        <div className="flex gap-4 justify-center">
+          <Link href="/request-invite">
+            <Button size="lg" className="text-lg px-8">
+              Join Waitlist
+            </Button>
+          </Link>
+          <ViewDealsButton />
+        </div>
+        <div className="pt-4 text-sm text-muted-foreground">
+          {stats.totalDeals} deals shared by creators so far • Average deal size: {formatCurrency(stats.averageAmount)}
+        </div>
+      </div>
+
       {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
@@ -88,7 +112,7 @@ export default async function Home() {
       </div>
 
       {/* Data Table */}
-      <Card>
+      <Card id="deals">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Recent Brand Deals</CardTitle>
         </CardHeader>

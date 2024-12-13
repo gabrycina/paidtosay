@@ -6,28 +6,37 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { brandName, amount, currency, platform, category, followerCount, inviteId, description } = body
+    const { brandName, amount, currency, platform, category, followerCount, inviteCode, description } = body
 
-    if (!inviteId) {
-      return NextResponse.json({ error: 'Invalid invite code' }, { status: 400 })
+    // Find the invite code first
+    const invite = await prisma.inviteCode.findUnique({
+      where: { code: inviteCode }
+    })
+
+    if (!invite) {
+      return NextResponse.json({ error: 'Invalid invite code' }, { status: 404 })
     }
 
+    if (invite.used) {
+      return NextResponse.json({ error: 'Invite code already used' }, { status: 400 })
+    }
+
+    // Create the submission
     const submission = await prisma.submission.create({
       data: {
         brandName,
-        amount: parseFloat(amount),
+        amount,
         currency,
         platform,
         category,
-        followerCount: parseInt(followerCount),
-        inviteId,
-        description: description || undefined,
+        followerCount,
+        description,
+        inviteId: invite.id
       },
     })
 
-    return NextResponse.json(submission, { status: 201 })
-  } catch (error) {
-    console.error('Error creating submission:', error)
+    return NextResponse.json(submission)
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create submission' },
       { status: 500 }

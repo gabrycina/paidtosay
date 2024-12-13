@@ -32,11 +32,10 @@ model InviteCode {
 }
 
 model InviteRequest {
-  id        String   @id @default(cuid())
-  email     String
-  platform  String
-  username  String
-  followers Int
-  status    String   @default("pending") // pending, approved, rejected
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  email         String
+  platform      String
+  category      String   @default("Other")
+  followerCount Int      @default(0)
+  createdAt     DateTime @default(now())
 }

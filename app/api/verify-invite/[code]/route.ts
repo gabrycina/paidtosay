@@ -5,24 +5,25 @@ const prisma = new PrismaClient()
 
 export async function GET(
   request: Request,
-  { params }: { params: { code: string } }
+  context: { params: Promise<{ code: string }> }
 ) {
   try {
-    const code = (await params).code
+    const { code } = await context.params
+
     const inviteCode = await prisma.inviteCode.findUnique({
-      where: { code },
+      where: { code: code }
     })
 
     if (!inviteCode) {
-      return NextResponse.json({ valid: false, error: 'Invalid invite code' }, { status: 404 })
+      return NextResponse.json({ error: 'Invalid invite code' }, { status: 404 })
     }
 
     if (inviteCode.used) {
-      return NextResponse.json({ valid: false, error: 'Invite code already used' }, { status: 400 })
+      return NextResponse.json({ error: 'Invite code already used' }, { status: 400 })
     }
 
-    return NextResponse.json({ valid: true, inviteId: inviteCode.id })
-  } catch (error) {
-    return NextResponse.json({ valid: false, error: 'Server error' }, { status: 500 })
+    return NextResponse.json({ valid: true })
+  } catch {
+    return NextResponse.json({ error: 'Failed to verify invite code' }, { status: 500 })
   }
 } 

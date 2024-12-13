@@ -5,13 +5,13 @@ const prisma = new PrismaClient()
 
 export async function POST(
   request: Request,
-  { params }: { params: { code: string } }
-) {
+  context: { params: Promise<{ code: string }> }
+): Promise<NextResponse> {
   try {
-    const code = (await params).code
+    const { code } = (await context.params)
     
     await prisma.inviteCode.update({
-      where: { code: code },
+      where: { code },
       data: { 
         used: true,
         usedAt: new Date()
@@ -19,7 +19,7 @@ export async function POST(
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to mark invite as used' }, { status: 500 })
   }
 } 

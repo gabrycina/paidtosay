@@ -6,17 +6,17 @@ const prisma = new PrismaClient()
 
 export async function POST() {
   try {
-    // Generate a random 8-character code
-    const code = crypto.randomBytes(4).toString('hex')
-
+    const code = crypto.randomBytes(3).toString('hex').toUpperCase()
+    
     const inviteCode = await prisma.inviteCode.create({
       data: {
         code,
-      },
+        used: false
+      }
     })
 
     return NextResponse.json({ code: inviteCode.code })
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to generate invite' }, { status: 500 })
+  } catch {
+    return NextResponse.json({ error: 'Failed to generate invite code' }, { status: 500 })
   }
 }
