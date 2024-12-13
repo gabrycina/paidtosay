@@ -4,15 +4,18 @@ import { DataTable } from '@/components/data-table'
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import ViewDealsButton from "@/components/view-deals-button"
+import { EmptySubmission } from "./models/submission"
 
 const prisma = new PrismaClient()
 
 export default async function Home() {
-  const submissions = await prisma.submission.findMany({
-    orderBy: {
-      createdAt: 'desc'
-    }
-  })
+  // const submissions = await prisma.submission.findMany({
+  //   orderBy: {
+  //     createdAt: 'desc'
+  //   }
+  // })
+
+  const submissions = [EmptySubmission]
 
   // Calculate detailed statistics
   const stats = {
@@ -36,11 +39,11 @@ export default async function Home() {
   return (
     <div className="container mx-auto space-y-8">
       {/* Hero Section */}
-      <div className="py-20 text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold">
+      <div className="pt-20 pb-10 text-center space-y-6">
+        <h1 className="text-7xl md:text-6xl font-bold">
           Know Your Worth 💸
         </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-md md:text-md text-muted-foreground md:max-w-xl mx-auto">
           Anonymous platform for creators to share and discover real sponsorship rates. No more guessing what to charge.
         </p>
         <div className="flex gap-4 justify-center">
@@ -50,9 +53,6 @@ export default async function Home() {
             </Button>
           </Link>
           <ViewDealsButton />
-        </div>
-        <div className="pt-4 text-sm text-muted-foreground">
-          {stats.totalDeals} deals shared by creators so far • Average deal size: {formatCurrency(stats.averageAmount)}
         </div>
       </div>
 
@@ -64,14 +64,6 @@ export default async function Home() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalDeals}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Deal Size</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(stats.averageAmount)}</div>
           </CardContent>
         </Card>
         <Card>
@@ -89,14 +81,6 @@ export default async function Home() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.platforms}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Categories</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.categories}</div>
           </CardContent>
         </Card>
         <Card>

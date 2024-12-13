@@ -20,18 +20,7 @@ import {
   SelectValue 
 } from "@/components/ui/select"
 import { ArrowUpDown, Check, ChevronDown, ChevronRight } from "lucide-react"
-
-type Submission = {
-  id: string
-  brandName: string
-  amount: number
-  currency: string
-  platform: string
-  category: string
-  followerCount: number
-  createdAt: Date
-  description: string | null
-}
+import { Submission } from '@/app/models/submission'
 
 type SortConfig = {
   key: keyof Submission
@@ -119,8 +108,8 @@ export function DataTable({ data: initialData }: { data: Submission[] }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-4 items-end">
-        <div className="grid grid-cols-4 gap-4 flex-1">
+      <div className="flex flex-col md:flex-row gap-4 md:items-end">
+        <div className="grid grid-rows-4 md:grid-cols-4 md:grid-rows-1 gap-4 flex-1">
           <Select
             value={filters.platform}
             onValueChange={(value) => setFilters({ ...filters, platform: value })}

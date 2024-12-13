@@ -38,7 +38,7 @@ export default function RootLayout({
             </div>
           </div>
         </nav>
-        <main>{children}</main>
+        <main className="max-w-xs sm:max-w-4xl mx-auto">{children}</main>
       </body>
     </html>
   )
