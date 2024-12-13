@@ -9,13 +9,11 @@ import { EmptySubmission } from "./models/submission"
 const prisma = new PrismaClient()
 
 export default async function Home() {
-  // const submissions = await prisma.submission.findMany({
-  //   orderBy: {
-  //     createdAt: 'desc'
-  //   }
-  // })
-
-  const submissions = [EmptySubmission]
+  const submissions = await prisma.submission.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
 
   // Calculate detailed statistics
   const stats = {
