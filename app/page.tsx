@@ -4,7 +4,6 @@ import { DataTable } from '@/components/data-table'
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import ViewDealsButton from "@/components/view-deals-button"
-import { EmptySubmission } from "./models/submission"
 
 const prisma = new PrismaClient()
 
